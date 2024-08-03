@@ -41,7 +41,7 @@ $ npm install
 
 ```bash
 # development
-$ npm run dev
+$ npm run start:migrate:dev
 ```
 
 ### Test
