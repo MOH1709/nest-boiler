@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  nestjs:
+    build:
+      context: ../../
+      dockerfile: docker/dev/Dockerfile
+    networks:
+      - nest-boiler-dev
+    ports:
+      - '5000:5000'
+    volumes:
+      - ../../src:/dev-nestjs/src
+      - ../../.env:/dev-nestjs/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    networks:
+      - nest-boiler-dev
+    volumes:
+      - nest-boiler-dev:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      retries: 5
+      start_period: 30s
+
+networks:
+  nest-boiler-dev:
+    driver: bridge
+
+volumes:
+  nest-boiler-dev:
+    driver: local

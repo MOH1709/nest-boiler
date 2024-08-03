@@ -1,16 +1,12 @@
 ## Description
-- Nest JS Boiler plate for your project to maitain a large scale project
 
-## Run Production Build with Docker
-
-```bash
-$ docker compose up
-```
+- Nest JS Boiler plate for your project to maintain a large scale project
 
 ## Technologies
+
 - Nest JS
 - Prisma
-- Postres
+- Postgres
 - Docker
 - Eslint
 - Prettier
@@ -18,24 +14,37 @@ $ docker compose up
 - Jest
 - Swagger
 
-## Requirement
+## Run with Docker
+
+```bash
+# development
+$ npm run docker:dev
+
+# production
+$ npm run docker:prod
+```
+
+## Run without Docker
+
+### Requirement
+
 - Node v.20
 - Postgres
 
-## Installation
+### Installation
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+### Running the app
 
 ```bash
 # development
 $ npm run dev
 ```
 
-## Test
+### Test
 
 ```bash
 # unit tests
