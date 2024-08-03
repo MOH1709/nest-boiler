@@ -7,16 +7,16 @@ COPY package*.json ./
 RUN npm ci
 
 # copy files to create build
-COPY src/ src/
 COPY prisma/ prisma/
-COPY tsconfig*.json ./
 COPY .env .env
-
 RUN npm run db:generate:schema
+
+COPY tsconfig*.json ./
+COPY src/ src/
 RUN npm run build
 
 # clean/uninstall the dev modules
-RUN npm install --production
+RUN npm install --omit=dev
 
 
 # Stage 2
