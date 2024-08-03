@@ -25,6 +25,7 @@ export class DatabaseService
   async onModuleInit() {
     try {
       await this.$connect();
+      console.log('DB Connected Successfully');
     } catch (error) {
       console.log(error);
     }

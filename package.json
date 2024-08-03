@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "nest start --watch",
+    "dev": "nest start --tsc --watch",
+    "start:migrate:dev": "npm run db:deploy && npm run dev",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "db:generate:schema": "npx prisma generate",
@@ -15,6 +16,7 @@
     "db:migrate": "prisma migrate dev --name $migrationName",
     "db:studio": "prisma studio",
     "prepare": "node -e \"process.env.NODE_ENV !== 'production' && require('child_process').execSync('husky install', {stdio: 'inherit'})\"",
+    "docker:dev": "docker compose -f docker/dev/docker-compose.yml up --build",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -25,7 +27,8 @@
     "test": "jest",
     "build": "nest build",
     "start:migrate:prod": "npm run db:deploy && node dist/main",
-    "db:deploy": "npx prisma migrate deploy"
+    "db:deploy": "npx prisma migrate deploy",
+    "docker:prod": "docker compose -f docker/prod/docker-compose.yml up --build"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,scss,md}": [
