@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 async function insertSeed() {
@@ -26,7 +27,7 @@ async function insertSeed() {
       },
     });
   } catch (e) {
-    console.error(e);
+    Logger.error(e);
   } finally {
     await prisma.$disconnect();
   }
@@ -34,4 +35,4 @@ async function insertSeed() {
 
 insertSeed()
   .then()
-  .catch((e) => console.log(e));
+  .catch((e) => Logger.error(e, 'User seed'));

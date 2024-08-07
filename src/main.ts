@@ -1,34 +1,24 @@
-import * as morgan from 'morgan';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { Logger } from '@nestjs/common';
+import { setupSwagger } from './swagger';
 import { onDevEnvironment } from './helpers/environment.helper';
-import { ValidationPipe } from '@nestjs/common';
 import { ResponseHandler } from './handlers/response.handler';
 import { ErrorHandler } from './handlers/error.handler';
-import { setupSwagger } from './main.swagger';
+import { validationHandler } from './handlers/validation.handler';
+import { requestLogHandler } from './handlers/requestLog.handler';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // API Handlers
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    })
-  );
-
-  app.use(
-    morgan('combined', {
-      skip(req, res) {
-        return res.statusCode <= 400 || res.statusCode === 404;
-      },
-    })
-  );
-
+  app.useGlobalPipes(validationHandler);
   app.useGlobalInterceptors(new ResponseHandler());
   app.useGlobalFilters(new ErrorHandler());
 
+  // API Analytics
+  app.use(requestLogHandler);
   onDevEnvironment(() => setupSwagger(app));
 
   const PORT = process.env.PORT ?? '5000';
@@ -37,4 +27,4 @@ async function bootstrap() {
 
 bootstrap()
   .then()
-  .catch((e) => console.log(e));
+  .catch((e) => Logger.log(e));

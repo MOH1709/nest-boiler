@@ -1,4 +1,9 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { onDevEnvironment } from 'src/helpers/environment.helper';
 
@@ -25,17 +30,18 @@ export class DatabaseService
   async onModuleInit() {
     try {
       await this.$connect();
-      console.info('DB Connected Successfully');
+      Logger.log('DB Connected Successfully', 'DB Status');
     } catch (error) {
-      console.log(error);
+      Logger.error(error, 'DB Status');
     }
   }
 
   async onModuleDestroy() {
     try {
       await this.$disconnect();
+      Logger.log('DB Disconnected', 'DB Status');
     } catch (error) {
-      console.log(error);
+      Logger.log(error, 'DB Status');
     }
   }
 }
