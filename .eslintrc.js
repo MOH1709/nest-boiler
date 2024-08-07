@@ -9,6 +9,7 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
+    'prettier',
   ],
   root: true,
   env: {
@@ -48,6 +49,5 @@ module.exports = {
         format: ['PascalCase'],
       },
     ],
-    'prettier/prettier': ['error', { endOfLine: 'auto' }],
   },
 };

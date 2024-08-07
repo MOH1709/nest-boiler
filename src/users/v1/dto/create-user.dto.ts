@@ -3,16 +3,25 @@ import { UserRole } from '@prisma/client';
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserDTO {
-  @ApiProperty({ description: 'user name should be unique', default: 'mohit' })
+  @ApiProperty({
+    description: 'user name should be unique',
+    default: 'mohit',
+  })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ description: 'email id of user', default: 'test@mail.com' })
+  @ApiProperty({
+    description: 'email id of user',
+    default: 'test@mail.com',
+  })
   @IsEmail()
   email: string;
 
-  @ApiProperty({ description: `Role ${UserRole}`, default: UserRole.USER })
+  @ApiProperty({
+    description: `Role ${UserRole}`,
+    default: UserRole.USER,
+  })
   @IsEnum(UserRole)
   role: UserRole;
 }
