@@ -1,37 +1,25 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Logger } from '@nestjs/common';
+import { setupSwagger } from './swagger';
 import { onDevEnvironment } from './helpers/environment.helper';
-import { ValidationPipe } from '@nestjs/common';
 import { ResponseHandler } from './handlers/response.handler';
 import { ErrorHandler } from './handlers/error.handler';
+import { validationHandler } from './handlers/validation.handler';
+import { requestLogHandler } from './handlers/requestLog.handler';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // API Handlers
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
-
+  app.useGlobalPipes(validationHandler);
   app.useGlobalInterceptors(new ResponseHandler());
   app.useGlobalFilters(new ErrorHandler());
 
-  function setupSwagger() {
-    const config = new DocumentBuilder()
-      .setTitle('Boiler Plate')
-      .setDescription('API description')
-      .setVersion('1.0')
-      .addTag('demo')
-      .build();
-
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api/doc', app, document);
-  }
-  onDevEnvironment(setupSwagger);
+  // API Analytics
+  app.use(requestLogHandler);
+  onDevEnvironment(() => setupSwagger(app));
 
   const PORT = process.env.PORT ?? '5000';
   await app.listen(PORT);
@@ -39,4 +27,4 @@ async function bootstrap() {
 
 bootstrap()
   .then()
-  .catch((e) => console.log(e));
+  .catch((e) => Logger.log(e));

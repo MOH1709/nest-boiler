@@ -19,7 +19,7 @@ export class ResponseHandler implements NestInterceptor {
         statusCode: context.switchToHttp().getResponse().statusCode,
         path: url,
         timestamp: new Date().toISOString(),
-      })),
+      }))
     );
   }
 }
