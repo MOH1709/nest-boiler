@@ -1,18 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
-import { GetUserListDTO } from './dto/get-user-list.dto';
+import { CreateUserDTO, GetUserListDTO } from './dto';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   private userModel: PrismaClient['user'];
 
-  constructor(databaseService: DatabaseService) {
-    this.userModel = databaseService.user;
+  constructor(private databaseService: DatabaseService) {
+    this.userModel = this.databaseService.user;
   }
 
-  async getUserList(queryData: GetUserListDTO) {
-    const { limit: LIMIT, page: PAGE } = queryData;
+  async createUser(data: CreateUserDTO) {
+    return await this.userModel.create({ data });
+  }
+
+  async getUserList(data: GetUserListDTO) {
+    const { limit: LIMIT, page: PAGE } = data;
 
     return await this.userModel.findMany({
       take: LIMIT,
