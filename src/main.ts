@@ -5,7 +5,7 @@ import { setupSwagger } from './swagger';
 import { onDevEnvironment } from './helpers/environment.helper';
 import { ResponseHandler } from './handlers/response.handler';
 import { ErrorHandler } from './handlers/error.handler';
-import { validationHandler } from './handlers/validation.handler';
+import { ValidationHandler } from './handlers/validation.handler';
 import { requestLogHandler } from './handlers/requestLog.handler';
 
 async function bootstrap() {
@@ -13,7 +13,7 @@ async function bootstrap() {
 
   // API Handlers
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(validationHandler);
+  app.useGlobalPipes(new ValidationHandler());
   app.useGlobalInterceptors(new ResponseHandler());
   app.useGlobalFilters(new ErrorHandler());
 
