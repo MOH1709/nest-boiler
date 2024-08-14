@@ -17,6 +17,11 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseHandler());
   app.useGlobalFilters(new ErrorHandler());
 
+  app.enableCors({
+    credentials: false,
+    origin: '*',
+  });
+
   // API Analytics
   app.use(requestLogHandler);
   onDevEnvironment(() => setupSwagger(app));
