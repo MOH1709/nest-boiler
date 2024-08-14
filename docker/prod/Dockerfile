@@ -9,14 +9,14 @@ RUN npm ci
 # copy files to create build
 COPY prisma/ prisma/
 COPY .env .env
-RUN npm run db:generate:schema
+RUN npm run db:generate
 
 COPY tsconfig*.json ./
 COPY src/ src/
 RUN npm run build
 
 # clean/uninstall the dev modules
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 
 # Stage 2
