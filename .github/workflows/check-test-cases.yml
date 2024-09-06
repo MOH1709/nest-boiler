@@ -1,10 +1,9 @@
 name: Check Test Cases
 
 on:
-  push:
-    branches: [master, main]
   pull_request:
-    branches: [master, main]
+    branches:
+      - main
 
 jobs:
   test:
