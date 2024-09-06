@@ -2,8 +2,9 @@ name: Check Test Cases
 
 on:
   push:
-    branches:
-      - main
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
 
 jobs:
   test:
