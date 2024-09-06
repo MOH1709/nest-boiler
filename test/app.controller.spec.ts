@@ -16,7 +16,7 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('server health check', () => {
-      expect(appController.handleHealthCheck()).toBe('Server is Running!!');
+      expect(appController.handleHealthCheck()).toBe('Serve is Running!!');
     });
   });
 });
