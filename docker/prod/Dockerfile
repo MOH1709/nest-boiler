@@ -8,6 +8,7 @@ RUN npm ci
 
 # copy files to create build
 COPY prisma/ prisma/
+COPY views/ views/
 COPY .env .env
 RUN npm run db:generate
 
@@ -23,11 +24,11 @@ RUN npm ci --omit=dev
 FROM node:20.16.0 AS run
 WORKDIR /app
 
-COPY --from=build build/package*.json .
-COPY --from=build build/tsconfig*.json .
+COPY --from=build build/package.json .
 COPY --from=build build/node_modules node_modules/
 COPY --from=build build/prisma prisma
 COPY --from=build build/dist dist
+COPY --from=build build/views views
 COPY --from=build build/.env .env
 
 CMD ["npm", "run", "start:migrate:prod"]
