@@ -8,6 +8,7 @@ RUN npm ci
 
 # copy files require to run
 COPY prisma/ prisma/
+COPY views/ views/
 COPY .env .env
 RUN npm run db:generate
 

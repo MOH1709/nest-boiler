@@ -7,9 +7,11 @@ import { ResponseHandler } from './handlers/response.handler';
 import { ErrorHandler } from './handlers/error.handler';
 import { ValidationHandler } from './handlers/validation.handler';
 import { requestLogHandler } from './handlers/requestLog.handler';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // API Handlers
   app.setGlobalPrefix('api');
@@ -21,6 +23,11 @@ async function bootstrap() {
     credentials: false,
     origin: '*',
   });
+
+  // Set the base directory for views &&
+  // Set the view engine to EJS
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.setViewEngine('ejs');
 
   // API Analytics
   app.use(requestLogHandler);
