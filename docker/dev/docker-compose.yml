@@ -5,7 +5,7 @@ services:
       context: ../../
       dockerfile: docker/dev/Dockerfile
     networks:
-      - nest-boiler-dev
+      - nest_boiler_dev
     ports:
       - '5000:5000'
     volumes:
@@ -13,6 +13,8 @@ services:
       - ../../.env:/dev-nestjs/.env
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   postgres:
@@ -23,9 +25,9 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
     networks:
-      - nest-boiler-dev
+      - nest_boiler_dev
     volumes:
-      - nest-boiler-dev:/var/lib/postgresql/data
+      - nest_boiler_dev:/var/lib/postgresql/data
     ports:
       - '${DB_PORT}:5432'
     healthcheck:
@@ -34,10 +36,25 @@ services:
       retries: 5
       start_period: 30s
 
+  redis:
+    image: redis:7.4.0
+    networks:
+      - nest_boiler_dev
+    volumes:
+      - nest_boiler_dev:/data
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+
 networks:
-  nest-boiler-dev:
+  nest_boiler_dev:
     driver: bridge
 
 volumes:
-  nest-boiler-dev:
+  nest_boiler_dev:
     driver: local

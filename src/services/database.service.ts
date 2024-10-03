@@ -30,7 +30,7 @@ export class DatabaseService
   async onModuleInit() {
     try {
       await this.$connect();
-      Logger.log('DB Connected Successfully', 'DB Status');
+      Logger.warn('DB Connected Successfully', 'DB Status');
     } catch (error) {
       Logger.error(error, 'DB Status');
     }
@@ -39,7 +39,7 @@ export class DatabaseService
   async onModuleDestroy() {
     try {
       await this.$disconnect();
-      Logger.log('DB Disconnected', 'DB Status');
+      Logger.warn('DB Disconnected', 'DB Status');
     } catch (error) {
       Logger.log(error, 'DB Status');
     }
