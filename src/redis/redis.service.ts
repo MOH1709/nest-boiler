@@ -5,12 +5,13 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { Redis } from 'ioredis';
+import { CryptoService } from 'src/services/crypto.service';
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
   redis: Redis;
 
-  constructor() {}
+  constructor(private cryptoService: CryptoService) {}
 
   onModuleInit() {
     this.redis = new Redis({
