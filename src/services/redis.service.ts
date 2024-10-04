@@ -18,11 +18,20 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
       port: parseInt(process.env.REDIS_PORT),
     });
 
-    Logger.warn('Redis Connected Successfully', 'Redis Status');
+    this.redis.on('connect', () => {
+      Logger.warn('Redis Connected Successfully', 'Redis Status');
+    });
+
+    this.redis.on('error', (e) => {
+      Logger.error(e, 'Redis Status');
+    });
+
+    this.redis.on('close', () => {
+      Logger.warn('Redis Disconnected', 'Redis Status');
+    });
   }
 
   onModuleDestroy() {
     this.redis.disconnect();
-    Logger.warn('Redis Disconnected Successfully', 'Redis Status');
   }
 }

@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { GlobalModule } from './services/global.module';
+import { ServiceModule } from './services/service.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { GlobalModule } from './services/global.module';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
-    GlobalModule,
+    DatabaseModule,
+    ServiceModule,
     AuthModule,
     UsersModule,
   ],
