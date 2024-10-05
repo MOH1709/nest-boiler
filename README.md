@@ -7,6 +7,7 @@
 - Nest JS
 - Prisma
 - Postgres
+- Redis
 - Docker
 - Eslint
 - Prettier
@@ -30,6 +31,7 @@ $ npm run docker:prod
 
 - Node v.20
 - Postgres
+- Redis
 
 ### Installation
 
