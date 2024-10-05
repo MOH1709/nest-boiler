@@ -5,11 +5,13 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { Redis } from 'ioredis';
+import { customMessage } from 'src/common/constant';
 import { CryptoService } from 'src/services/crypto.service';
+import { RedisSetHashParams, RedisSetParams } from './interface';
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
-  redis: Redis;
+  private redis: Redis;
 
   constructor(private cryptoService: CryptoService) {}
 
@@ -35,4 +37,52 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   onModuleDestroy() {
     this.redis.disconnect();
   }
+
+  //#region Setters
+
+  async set(params: RedisSetParams) {
+    try {
+      return await this.redis.set(
+        params.key,
+        JSON.stringify(params.value),
+        'EX',
+        params.ttl
+      );
+    } catch (error) {
+      Logger.error(error, customMessage.Redis.INFO);
+    }
+  }
+
+  async setHash(params: RedisSetHashParams) {
+    const HASH_KEY = this.cryptoService.generateHash(params.key);
+
+    try {
+      return await this.redis.set(
+        HASH_KEY,
+        JSON.stringify(params.value),
+        'EX',
+        params.ttl
+      );
+    } catch (error) {
+      Logger.error(error, customMessage.Redis.INFO);
+    }
+  }
+
+  //#endregion
+
+  //#region Getters
+
+  async get(key: string): Promise<unknown | null> {
+    const CACHED_DATA = await this.redis.get(key);
+    return CACHED_DATA ? JSON.parse(CACHED_DATA) : null;
+  }
+
+  async getHash(key: unknown): Promise<unknown | null> {
+    const HASH_KEY = this.cryptoService.generateHash(key);
+
+    const CACHED_DATA = await this.redis.get(HASH_KEY);
+    return CACHED_DATA ? JSON.parse(CACHED_DATA) : null;
+  }
+
+  //#endregion
 }

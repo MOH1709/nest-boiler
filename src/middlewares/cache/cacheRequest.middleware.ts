@@ -8,51 +8,45 @@ import {
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { RedisService } from 'src/redis/redis.service';
-import { CryptoService } from 'src/services/crypto.service';
-import { Redis, RedisCustomRequestKey } from './interface';
 import { Request } from 'express';
-import { CustomMessage } from 'src/helpers/global.helper';
+import { RedisCustomRequestKey } from 'src/common/interface';
+import { ApiCustomKey } from 'src/common/enum';
+import { customMessage } from 'src/common/constant';
 
 @Injectable()
 export class CacheRequestInterceptor implements NestInterceptor {
-  constructor(
-    private redisService: RedisService,
-    private cryptoService: CryptoService
-  ) {}
+  readonly DEFAULT_TTL = 300;
+
+  constructor(private redisService: RedisService) {}
 
   async intercept(context: ExecutionContext, next: CallHandler) {
     const request = context.switchToHttp().getRequest() as Request;
     const customValue: RedisCustomRequestKey | undefined =
-      request[Redis.API_CUSTOM_KEY];
+      request[ApiCustomKey.REDIS];
 
     const payload = Object.keys(request.body).length
       ? request.body
       : request.query;
 
     if (Object.keys(payload).length === 0) {
-      Logger.warn('No key found for caching !', CustomMessage.Redis.NO_KEY);
+      Logger.warn('No key found for caching !', customMessage.Redis.INFO);
       return next.handle();
     }
 
-    const hash = this.cryptoService.generateHash(payload);
-    const cachedData = await this.redisService.redis.get(hash);
-
+    const cachedData = await this.redisService.getHash(payload);
     if (cachedData) {
-      return of(JSON.parse(cachedData));
+      return of(cachedData);
     }
 
-    return next
-      .handle()
-      .pipe(
-        tap(
-          async (response) =>
-            await this.redisService.redis.set(
-              hash,
-              JSON.stringify(response),
-              'EX',
-              customValue?.ttl ?? 5
-            )
-        )
-      );
+    return next.handle().pipe(
+      tap(
+        async (response) =>
+          await this.redisService.setHash({
+            key: payload,
+            value: response,
+            ttl: customValue?.ttl ?? this.DEFAULT_TTL,
+          })
+      )
+    );
   }
 }

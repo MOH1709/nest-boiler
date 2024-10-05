@@ -10,7 +10,7 @@ export class AppController {
     return this.appService.checkHealth();
   }
 
-  @Get('welcome')
+  @Get('info')
   @Render('greet')
   handleGetWelcomePage() {
     return { name: 'Mohit Ahirwal' };
