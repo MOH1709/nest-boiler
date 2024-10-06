@@ -1,5 +1,7 @@
 import { Controller, Get, Render } from '@nestjs/common';
 import { AppService } from './app.service';
+import { PageTemplate } from './common/enum';
+import { PageTemplateContext } from './common/interface';
 
 @Controller('')
 export class AppController {
@@ -11,8 +13,8 @@ export class AppController {
   }
 
   @Get('info')
-  @Render('greet')
-  handleGetWelcomePage() {
+  @Render(PageTemplate.INFO)
+  handleGetWelcomePage(): PageTemplateContext[PageTemplate.INFO] {
     return { name: 'Mohit Ahirwal' };
   }
 }
