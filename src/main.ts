@@ -26,7 +26,7 @@ async function bootstrap() {
 
   // Set the base directory for views &&
   // Set the view engine to EJS
-  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views', 'pages'));
   app.setViewEngine('ejs');
 
   // API Analytics
