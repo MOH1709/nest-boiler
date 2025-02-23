@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "orta.vscode-jest",
+    "prisma.prisma",
+    "esbenp.prettier-vscode"
+  ]
+}
