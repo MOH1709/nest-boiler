@@ -16,7 +16,6 @@
     "db:migrate": "prisma migrate dev --name",
     "db:studio": "prisma studio",
     "prepare": "node -e \"process.env.NODE_ENV !== 'production' && require('child_process').execSync('husky install', {stdio: 'inherit'})\"",
-    "docker:dev": "docker compose -f docker/dev/docker-compose.yml up --build",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -27,8 +26,7 @@
     "test": "jest",
     "build": "nest build",
     "start:migrate:prod": "npm run db:deploy && node dist/main",
-    "db:deploy": "npx prisma migrate deploy",
-    "docker:prod": "docker compose -f docker/prod/docker-compose.yml up --build"
+    "db:deploy": "npx prisma migrate deploy"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,scss,md}": [
