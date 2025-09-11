@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO, GetUserListDTO } from './dto';
-import { setRoles } from 'src/decorators/roles.decorator';
+import { AllowedRoles } from 'src/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { JWTAuthGuard } from 'src/auth/guards/auth.guard';
 import { LoginUserDTO } from './dto/login-user-dto';
@@ -27,8 +27,8 @@ export class UserController {
 
   @Post('')
   @UseGuards(RoleGuard)
+  @AllowedRoles('ADMIN')
   @UseGuards(JWTAuthGuard)
-  @setRoles('admin')
   async handleCreateUser(@Body() body: CreateUserDTO) {
     const PASSWORD = await this.authService.getHashedString(body.password);
     body.password = PASSWORD;
@@ -55,14 +55,16 @@ export class UserController {
       }
 
       const token = await this.authService.generateToken({
-        userId: 'mohit',
-        username: 'mohit',
+        userId: userDetails.userId,
+        username: userDetails.name,
+        role: userDetails.role.name,
       });
 
       res.cookie('access_token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
         sameSite: 'strict',
+        maxAge: 1000 * 60 * 60 * 24 * 7,
       });
 
       return res.send({ message: 'success' });

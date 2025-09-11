@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { LoginType, PrismaClient, User } from '@prisma/client';
 import { v4 as uuidV4 } from 'uuid';
+import * as bcrypt from 'bcryptjs';
 
 async function insertSeed() {
   const prisma = new PrismaClient();
@@ -9,12 +10,14 @@ async function insertSeed() {
     where: {},
   });
 
+  const hashedPassword = await bcrypt.hash('12345678', 10);
+
   const users: User[] = [
     {
       id: uuidV4(),
       name: 'ADMIN',
       loginType: LoginType.EMAIL,
-      password: '12345678',
+      password: hashedPassword,
       userId: 'admin@mail.com',
       roleId: role.id,
       createdAt: new Date(),

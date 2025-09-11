@@ -5,7 +5,7 @@ import { IsEnum, IsString } from 'class-validator';
 export class LoginUserDTO {
   @ApiProperty({
     description: 'unique user id, can be in any form',
-    default: 'test@mail.com',
+    default: 'admin@mail.com',
   })
   @IsString()
   userId: string;

@@ -2,6 +2,7 @@ import { Controller, Get, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PageTemplate } from './common/enum';
 import { PageTemplateContext } from './common/interface';
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 @Controller('')
 export class AppController {
@@ -13,6 +14,7 @@ export class AppController {
   }
 
   @Get('info')
+  @ApiExcludeEndpoint()
   @Render(PageTemplate.INFO)
   handleGetWelcomePage(): PageTemplateContext[PageTemplate.INFO] {
     return { name: 'Mohit Ahirwal' };

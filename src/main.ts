@@ -34,9 +34,11 @@ async function bootstrap() {
   onDevEnvironment(() => setupSwagger(app));
 
   const PORT = process.env.PORT ?? '5000';
-  await app.listen(PORT);
+  await app.listen(PORT, () =>
+    Logger.warn(`Server running on port ${PORT}`, 'Server Status')
+  );
 }
 
 bootstrap()
   .then()
-  .catch((e) => Logger.log(e));
+  .catch((e) => Logger.error(e, 'Server Error'));

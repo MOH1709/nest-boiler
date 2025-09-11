@@ -36,7 +36,14 @@ export class UserService {
         userId: USER_ID,
       },
       select: {
+        name: true,
+        userId: true,
         password: true,
+        role: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
   }

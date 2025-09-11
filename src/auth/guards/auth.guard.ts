@@ -3,12 +3,12 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { AuthGuard as NestAuthGuard } from '@nestjs/passport';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
+import * as cookie from 'cookie';
 import type { Request } from 'express';
 
 @Injectable()
 export class JWTAuthGuard extends NestAuthGuard('jwt') implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {
+  constructor() {
     super();
   }
 
@@ -17,23 +17,35 @@ export class JWTAuthGuard extends NestAuthGuard('jwt') implements CanActivate {
     const TOKEN = this.extractJwtFromRequest(request);
 
     if (!TOKEN) {
-      throw new UnauthorizedException('Access token not found.');
+      throw new UnauthorizedException('Invalid Token');
     }
 
-    const payload = this.jwtService.verify(TOKEN);
+    const jwtService = new JwtService({
+      publicKey: process.env.JWT_SECRET,
+    });
+
+    const payload = jwtService.verify(TOKEN);
     request.user = payload;
 
-    return false;
+    return true;
   }
 
   private extractJwtFromRequest(request: Request): string | null {
-    if (!request.headers.authorization) {
-      return null;
+    const cookies = request.headers.cookie
+      ? cookie.parse(request.headers.cookie)
+      : {};
+
+    let token = cookies['access_token'];
+    if (token.startsWith('j:')) {
+      const jsonString = token.slice(2);
+      try {
+        const parsed = JSON.parse(jsonString);
+        token = parsed.access_token;
+      } catch (err) {
+        return null;
+      }
     }
-    const parts = request.headers.authorization.split(' ');
-    if (parts.length !== 2 || parts[0].toLowerCase() !== 'bearer') {
-      return null;
-    }
-    return parts[1];
+
+    return token;
   }
 }
