@@ -9,9 +9,12 @@ import { ValidationHandler } from './handlers/validation.handler';
 import { requestLogHandler } from './handlers/requestLog.handler';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { ConfigService } from '@nestjs/config';
+import { EnvVariable } from './common/interface';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const configService = new ConfigService<EnvVariable>();
 
   // API Handlers
   app.setGlobalPrefix('api');
@@ -33,7 +36,7 @@ async function bootstrap() {
   app.use(requestLogHandler);
   onDevEnvironment(() => setupSwagger(app));
 
-  const PORT = process.env.PORT ?? '5000';
+  const PORT = configService.get<number>('PORT') ?? 5000;
   await app.listen(PORT, () =>
     Logger.warn(`Server running on port ${PORT}`, 'Server Status')
   );
