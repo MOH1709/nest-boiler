@@ -8,7 +8,7 @@ import type { Request } from 'express';
 
 @Injectable()
 export class JWTAuthGuard extends NestAuthGuard('jwt') implements CanActivate {
-  constructor() {
+  constructor(private readonly jwtService: JwtService) {
     super();
   }
 
@@ -20,11 +20,7 @@ export class JWTAuthGuard extends NestAuthGuard('jwt') implements CanActivate {
       throw new UnauthorizedException('Invalid Token');
     }
 
-    const jwtService = new JwtService({
-      publicKey: process.env.JWT_SECRET,
-    });
-
-    const payload = jwtService.verify(TOKEN);
+    const payload = this.jwtService.verify(TOKEN);
     request.user = payload;
 
     return true;
