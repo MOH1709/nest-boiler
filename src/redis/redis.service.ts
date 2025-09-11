@@ -8,17 +8,22 @@ import { Redis } from 'ioredis';
 import { customMessage } from 'src/common/constant';
 import { CryptoService } from 'src/services/crypto.service';
 import { RedisSetHashParams, RedisSetParams } from './interface';
+import { ConfigService } from '@nestjs/config';
+import { EnvVariable } from 'src/common/interface';
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
   private redis: Redis;
 
-  constructor(private cryptoService: CryptoService) {}
+  constructor(
+    private cryptoService: CryptoService,
+    private configService: ConfigService<EnvVariable>
+  ) {}
 
   onModuleInit() {
     this.redis = new Redis({
-      host: process.env.REDIS_HOST,
-      port: parseInt(process.env.REDIS_PORT),
+      host: this.configService.get('REDIS_HOST'),
+      port: parseInt(this.configService.get('REDIS_PORT')),
     });
 
     this.redis.on('connect', () => {

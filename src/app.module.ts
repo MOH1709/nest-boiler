@@ -5,7 +5,6 @@ import { UsersModule } from './users/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
-import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { RedisModule } from './redis/redis.module';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
-    RedisModule,
     DatabaseModule,
     AuthModule,
     UsersModule,

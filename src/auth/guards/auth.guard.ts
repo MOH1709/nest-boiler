@@ -20,8 +20,12 @@ export class JWTAuthGuard extends NestAuthGuard('jwt') implements CanActivate {
       throw new UnauthorizedException('Invalid Token');
     }
 
-    const payload = this.jwtService.verify(TOKEN);
-    request.user = payload;
+    try {
+      const payload = this.jwtService.verify(TOKEN);
+      request.user = payload;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid Token');
+    }
 
     return true;
   }

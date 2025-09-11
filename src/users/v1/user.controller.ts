@@ -9,6 +9,7 @@ import {
   Query,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO, GetUserListDTO } from './dto';
@@ -17,6 +18,7 @@ import { RoleGuard } from 'src/auth/guards/role.guard';
 import { JWTAuthGuard } from 'src/auth/guards/auth.guard';
 import { LoginUserDTO } from './dto/login-user-dto';
 import { Response } from 'express';
+import { CacheRequestInterceptor } from 'src/middlewares/cache/cacheRequest.middleware';
 
 @Controller('v1/user')
 export class UserController {
@@ -76,6 +78,7 @@ export class UserController {
 
   @Get('list')
   @UseGuards(JWTAuthGuard)
+  @UseInterceptors(CacheRequestInterceptor)
   async handleGetUserList(@Query() query: GetUserListDTO) {
     return await this.userService.getUserList(query);
   }
