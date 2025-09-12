@@ -41,7 +41,7 @@ export class DatabaseService
       await this.$disconnect();
       Logger.warn('DB Disconnected', 'DB Status');
     } catch (error) {
-      Logger.log(error, 'DB Status');
+      Logger.error(error, 'DB Status');
     }
   }
 }

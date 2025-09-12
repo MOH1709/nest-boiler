@@ -78,9 +78,8 @@ export class UserController {
 
   @Get('list')
   @UseGuards(JWTAuthGuard)
-  @UseInterceptors(CacheInterceptor)
+  @UseInterceptors(CacheInterceptor) // to cache response
   async handleGetUserList(@Query() query: GetUserListDTO) {
-    console.log('Function executed');
     return await this.userService.getUserList(query);
   }
 }
