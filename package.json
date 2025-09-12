@@ -7,11 +7,11 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "nest start --tsc --watch",
-    "start:migrate:dev": "npm run db:deploy && npm run dev",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
-    "db:generate": "npx prisma generate",
-    "db:seed": "ts-node ",
+    "prisma:generate": "npx prisma generate",
+    "db:deploy": "npx prisma migrate deploy",
+    "db:seed": "ts-node prisma/seeds/runner.ts",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev --name",
     "db:studio": "prisma studio",
@@ -25,8 +25,7 @@
     "db:check": "prisma db pull",
     "test": "jest",
     "build": "nest build",
-    "start:migrate:prod": "npm run db:deploy && node dist/main",
-    "db:deploy": "npx prisma migrate deploy"
+    "start:prod": "nest build && node dist/main"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,scss,md}": [

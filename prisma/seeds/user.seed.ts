@@ -3,7 +3,7 @@ import { LoginType, PrismaClient, User } from '@prisma/client';
 import { v4 as uuidV4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 
-async function insertSeed() {
+export async function insertSeed() {
   const prisma = new PrismaClient();
 
   const role = await prisma.role.findFirst({
@@ -23,10 +23,6 @@ async function insertSeed() {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
-    // {
-    //   id: uuidV4(),
-    //   name: 'USER',
-    // },
   ];
 
   try {
@@ -40,7 +36,3 @@ async function insertSeed() {
     await prisma.$disconnect();
   }
 }
-
-insertSeed()
-  .then()
-  .catch((e) => Logger.error(e, 'Users role seed'));

@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { PrismaClient, Role } from '@prisma/client';
 import { v4 as uuidV4 } from 'uuid';
 
-async function insertSeed() {
+export async function insertSeed() {
   const prisma = new PrismaClient();
   const roles: Role[] = [
     {
@@ -26,7 +26,3 @@ async function insertSeed() {
     await prisma.$disconnect();
   }
 }
-
-insertSeed()
-  .then()
-  .catch((e) => Logger.error(e, 'Users role seed'));

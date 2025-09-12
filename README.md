@@ -7,31 +7,16 @@
 - Nest JS
 - Prisma
 - Postgres
-- Redis
-- Docker
 - Eslint
 - Prettier
 - Husky
 - Jest
 - Swagger
 
-## Run with Docker
-
-```bash
-# development
-$ npm run docker:dev
-
-# production
-$ npm run docker:prod
-```
-
-## Run without Docker
-
 ### Requirement
 
-- Node v.20
+- Node v20
 - Postgres
-- Redis
 
 ### Installation
 
@@ -42,13 +27,19 @@ $ npm install
 ### Running the app
 
 ```bash
-# development
-$ npm run start:migrate:dev
+$ npm run prisma:generate
+$ npm run db:deploy
+$ npm run dev
+```
+
+### Adding Data in Database If Required
+
+```bash
+$ npm run db:seed
 ```
 
 ### Test
 
 ```bash
-# unit tests
 $ npm run test
 ```
