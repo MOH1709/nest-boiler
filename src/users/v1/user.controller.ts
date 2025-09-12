@@ -18,7 +18,7 @@ import { RoleGuard } from 'src/auth/guards/role.guard';
 import { JWTAuthGuard } from 'src/auth/guards/auth.guard';
 import { LoginUserDTO } from './dto/login-user-dto';
 import { Response } from 'express';
-import { CacheRequestInterceptor } from 'src/middlewares/cache/cacheRequest.middleware';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('v1/user')
 export class UserController {
@@ -78,8 +78,9 @@ export class UserController {
 
   @Get('list')
   @UseGuards(JWTAuthGuard)
-  @UseInterceptors(CacheRequestInterceptor)
+  @UseInterceptors(CacheInterceptor)
   async handleGetUserList(@Query() query: GetUserListDTO) {
+    console.log('Function executed');
     return await this.userService.getUserList(query);
   }
 }
